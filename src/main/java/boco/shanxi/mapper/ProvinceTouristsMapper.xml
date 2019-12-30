@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.ProvinceTouristsMapper">
+    <resultMap id="findProvinceTouristsMapper" type="boco.shanxi.domain.ProvinceTourists">
+        <id property="id" column="id" />
+        <result property="province" column="province" />
+        <result property="touristsAmt" column="tourists_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addProvinceTourists" parameterType="boco.shanxi.domain.ProvinceTourists">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into province_tourists(province,tourists_amt,create_time)
+        values(#{province},#{touristsAmt},#{createTime})
+    </insert>
+
+    <sql id="findProvinceTourists">
+        select id,province,tourists_amt,create_time
+        from province_tourists
+    </sql>
+
+    <select id="selectProvinceTourists" resultMap="findProvinceTouristsMapper">
+        <include refid="findProvinceTourists" />
+        order by tourists desc limit 3
+    </select>
+</mapper>

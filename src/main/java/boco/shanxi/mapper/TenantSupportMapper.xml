@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.TenantSupportMapper">
+    <resultMap id="findTenantMapper" type="boco.shanxi.domain.TenantSupport">
+        <id property="id" column="id" />
+        <result property="monthIncAmt" column="month_inc_amt" />
+        <result property="weekIncAmt" column="week_inc_amt" />
+        <result property="monthCompDispatchAmt" column="month_comp_dispatch_amt" />
+        <result property="weekCompDispatchAmt" column="week_comp_dispatch_amt" />
+        <result property="userAmt" column="user_amt" />
+        <result property="appAmt" column="app_amt" />
+        <result property="activeAmt" column="active_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addTenant" parameterType="boco.shanxi.domain.TenantSupport">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into tenant_support(month_inc_amt,week_inc_amt,month_comp_dispatch_amt,week_comp_dispatch_amt,user_amt,app_amt,active_amt，create_time)
+        values(#{monthIncAmt},#{weekIncAmt},#{monthCompDispatchAmt},#{weekCompDispatchAmt},#{userAmt},#{appAmt},#{activeAmt},#{createtime})
+    </insert>
+
+    <sql id="findTenant">
+        select id,month_inc_amt,week_inc_amt,month_comp_dispatch_amt,week_comp_dispatch_amt,user_amt,app_amt,active_amt，create_time
+        from tenant_support
+    </sql>
+    <select id="selectTenant" resultMap="findTenantMapper">
+        <include refid="findTenant" />
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.SystemSupportMapper">
+    <resultMap id="findSystemMapper" type="boco.shanxi.domain.SystemSupport">
+        <id property="id" column="id" />
+        <result property="clusterDiskUsageRate" column="cluster_disk_usage_rate" />
+        <result property="clusterMemoryUsageRate" column="cluster_memory_usage_rate" />
+        <result property="dbStorageUsageRate" column="db_storage_usage_rate" />
+        <result property="dbNodeState" column="db_node_state" />
+        <result property="platformAgentState" column="platform_agent_state" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addSystem" parameterType="boco.shanxi.domain.SystemSupport">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into system_support(cluster_disk_usage_rate,cluster_memory_usage_rate,db_storage_usage_rate,db_node_state,platform_agent_state,create_time)
+        values(#{clusterDiskUsageRate},#{clusterMemoryUsageRate},#{dbStorageUsageRate},#{dbNodeState},#{platformAgentState},#{createTime})
+    </insert>
+
+    <sql id="findSystem">
+        select id,cluster_disk_usage_rate,cluster_memory_usage_rate,db_storage_usage_rate,db_node_state,platform_agent_state,create_time
+        from system_support
+    </sql>
+    <select id="selectSystem" resultMap="findSystemMapper">
+        <include refid="findSystem" />
+    </select>
+</mapper>

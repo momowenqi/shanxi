@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.ResourceManageMapper">
+    <resultMap id="findResourceMapper" type="boco.shanxi.domain.ResourceManage">
+        <id property="id" column="id" />
+        <result property="resoName" column="reso_name" />
+        <result property="resoAmt" column="reso_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addResourceManage" parameterType="boco.shanxi.domain.ResourceManage">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into resource_manage(reso_name,reso_amt,create_time)
+        values(#{resoName},#{resoAmt},#{createTime})
+    </insert>
+
+    <sql id="findResource">
+        select id,reso_name,reso_amt,create_time
+        from resource_manage
+    </sql>
+    <select id="selectResourceManage" resultMap="findResourceMapper">
+        <include refid="findResource" />
+    </select>
+</mapper>

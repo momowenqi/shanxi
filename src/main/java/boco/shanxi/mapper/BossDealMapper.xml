@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.BossDealMapper">
+    <resultMap id="findBossDeal" type="boco.shanxi.domain.BossDeal">
+        <id property="id" column="id" />
+        <result property="voice10minPAmt" column="voice_10min_p_amt" />
+        <result property="voice10minUAmt" column="voice_10min_u_amt" />
+        <result property="flow10minPAmt" column="flow_10min_p_amt" />
+        <result property="flow10minUAmt" column="flow_10min_u_amt" />
+        <result property="other10minPAmt" column="other_10min_p_amt" />
+        <result property="other10minUAmt" column="other_10min_u_amt" />
+        <result property="channel10minPAmt" column="channel_10min_p_amt" />
+        <result property="channel10minUAmt" column="channel_10min_u_amt" />
+        <result property="createTime" column="create_time" />
+        <association property="area" javaType="boco.shanxi.domain.Area" column="area_id">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="createTime" column="create_time" />
+        </association>
+    </resultMap>
+
+    <insert id="addBossDeal" parameterType="boco.shanxi.domain.BossDeal">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select last_insert_id()
+        </selectKey>
+        insert into boss_deal_10min(area_id,voice_10min_p_amt,voice_10min_u_amt,flow_10min_p_amt,flow_10min_u_amt,
+        other_10min_p_amt,other_10min_u_amt,channel_10min_p_amt,channel_10min_u_amt,create_time)
+        values(#{area.id},#{voice10minPAmt},#{voice10minUAmt},#{flow10minPAmt},#{flow10minUAmt},
+        #{other10minPAmt},#{other10minUAmt},#{channel10minPAmt},#{channel10minUAmt},#{createTime})
+    </insert>
+
+    <sql id="findBossDeal">
+        select b.id,b.voice_10min_p_amt,b.voice_10min_u_amt,b.flow_10min_p_amt,b.flow_10min_u_amt,
+        b.other_10min_p_amt,b.other_10min_u_amt,b.channel_10min_p_amt,b.channel_10min_u_amt,b.create_time,
+        a.id,a.name,a.create_time
+        from boss_deal_10min b,area a
+    </sql>
+
+    <select id="selectBossDeal" resultMap="findBossDeal" parameterType="integer">
+        <include refid="findBossDeal" />
+        where b.area_id = #{areaId} and b.area_id = a.id
+        and b.create_time in (select MAX(create_time) from boss_deal_10min)
+    </select>
+</mapper>

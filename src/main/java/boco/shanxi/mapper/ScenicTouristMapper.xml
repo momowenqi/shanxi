@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.ScenicTouristMapper">
+    <resultMap id="findScenicTouristMapper" type="boco.shanxi.domain.ScenicTourist">
+        <id property="id" column="id" />
+        <result property="scenicName" column="scenic_name" />
+        <result property="touristsAmt" column="tourists_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addScenicTourist" parameterType="boco.shanxi.domain.ScenicTourist">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into scenic_tourist(scenic_name,tourists_amt,create_time)
+        values(#{scenicName},#{touristsAmt},#{create_time})
+    </insert>
+
+    <sql id="findScenicTourist">
+        select id,scenic_name,tourists_amt
+        from scenic_tourist
+    </sql>
+    <select id="selectScenicTourist" resultMap="findScenicTouristMapper">
+        <include refid="findScenicTourist" />
+    </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.BehaviorSupportMapper">
+    <resultMap id="findBehavior" type="boco.shanxi.domain.BehaviorSupport">
+        <id property="id" column="id" />
+        <result property="labelName" column="label_name" />
+        <result property="labelAmt" column="label_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addBehaviorSupport" parameterType="boco.shanxi.domain.BehaviorSupport">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select last_insert_id()
+        </selectKey>
+        insert into behavior_support(label_name,label_amt,create_time) values(#{labelName},#{labelAmt},#{createTime})
+    </insert>
+
+    <select id="selectBehaviorSupportList" resultMap="findBehavior">
+        select id,label_name,label_amt,create_time from behavior_support
+        where create_time in(select MAX(create_time) from behavior_support)
+    </select>
+</mapper>

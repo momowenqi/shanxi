@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.SystemMonitoringMapper">
+    <resultMap id="findSystemMonitoringMapper" type="boco.shanxi.domain.SystemMonitoring">
+        <id property="id" column="id" />
+        <result property="systemName" column="system_name" />
+        <result property="alertAmt" column="alert_amt" />
+        <result property="workOrderAmt" column="work_order_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addSystemMonitoring" parameterType="boco.shanxi.domain.SystemMonitoring">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into system_monitoring(system_name,alert_amt,work_order_amt,create_time)
+        values(#{systemName},#{alertAmt},#{workOrderAmt},#{createTime})
+    </insert>
+
+    <sql id="findSystemMonitoring">
+        select id,system_name,alert_amt,work_order_amt,create_time
+        from system_monitoring
+    </sql>
+    <select id="selectSystemMonitoring" resultMap="findSystemMonitoringMapper">
+        <include refid="findSystemMonitoring" />
+    </select>
+</mapper>

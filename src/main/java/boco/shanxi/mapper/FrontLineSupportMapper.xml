@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.FrontLineSupportMapper">
+    <resultMap id="findFrontLineMapper" type="boco.shanxi.domain.FrontLineSupport">
+        <id property="id" column="id" />
+        <result property="userAmt" column="user_amt" />
+        <result property="reportAmt" column="report_amt" />
+        <result property="viewsAmt" column="views_amt" />
+        <result property="mmsConfigAmt" column="mms_config_amt" />
+        <result property="mmsViews" column="mms_views" />
+        <result property="automaticAccess" column="automatic_access" />
+        <result property="monthListDlAmt" column="month_list_dl_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addFrontLine" parameterType="boco.shanxi.domain.FrontLineSupport">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into front_line_support(user_amt,report_amt,views_amt,mms_config_amt,mms_views,automatic_access,month_list_dl_amt,create_time)
+        values(#{userAmt},#{reportAmt},#{viewsAmt},#{mmsConfigAmt},#{mmsViews},#{automaticAccess},#{monthListDlAmt},#{createTime})
+    </insert>
+
+    <select id="selectFrontLine" resultMap="findFrontLineMapper">
+        select id,user_amt,report_amt,views_amt,mms_config_amt,mms_views,automatic_access,month_list_dl_amt,create_time
+        from front_line_support
+        where create_time in(select max(create_time) from front_line_support)
+    </select>
+</mapper>

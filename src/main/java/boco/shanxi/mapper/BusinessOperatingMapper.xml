@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.BusinessOperatingMapper">
+    <resultMap id="findBussinessOperating" type="boco.shanxi.domain.BusinessOperating">
+        <id property="id" column="id" />
+        <result property="queryBizTime" column="query_biz_time" />
+        <result property="acceptBizTime" column="accept_biz_time" />
+        <result property="payBootWorkOrderAmt" column="pay_boot_work_order_amt" />
+        <result property="payBootAvgTime" column="pay_boot_avg_time" />
+        <result property="openAccountAvgTime" column="open_account_avg_time" />
+        <result property="productChgAvgTime" column="prod_chg_avg_time" />
+        <result property="mkActAvgTime" column="mk_act_avg_time" />
+        <result property="dataQueryAvgTime" column="data_query_avg_time" />
+        <result property="billQueryAvgTime" column="bill_query_avg_time" />
+        <result property="unifiedAcPfDealSucRate" column="unified_ac_pf_deal_suc_rate" />
+        <result property="detectSucRate" column="detect_suc_rate" />
+        <result property="bossInterfaceDealAmt" column="boss_interface_deal_amt" />
+        <result property="bossInterfaceSucRate" column="boss_interface_suc_rate" />
+        <result property="provinceInterfaceDealAmt" column="province_interface_deal_amt" />
+        <result property="provinceInterfaceSucRate" column="province_interface_suc_rate" />
+        <result property="oneMinBootTimelyRate" column="one_min_boot_timely_rate" />
+        <result property="threeMinBootTimelyRate" column="three_min_boot_timely_rate" />
+        <result property="fiveMinBootTimelyRate" column="five_min_boot_timely_rate" />
+        <result property="eneityCrmAmt" column="eneity_crm_amt" />
+        <result property="elecCrmAmt" column="elec_crm_amt" />
+        <result property="ivrCrmAmt" column="ivr_crm_amt" />
+        <result property="bossCrmAmt" column="boss_crm_amt" />
+        <result property="otherCrmAmt" column="other_crm_amt" />
+        <result property="flowExhaustionAlertSucRate" column="flow_exhaustion_alert_suc_rate" />
+        <result property="fivemFlowAlertSmsTimelyRate" column="fivem_flow_alert_sms_timely_rate" />
+        <result property="createTime" column="create_time" />
+        <association property="area" column="area_id" javaType="boco.shanxi.domain.Area">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="createTime" column="create_time" />
+        </association>
+    </resultMap>
+    <insert id="addBusiOper" parameterType="boco.shanxi.domain.BusinessOperating">
+        <selectKey keyProperty="id" order="AFTER" resultType="integer">
+            select last_insert_id()
+        </selectKey>
+        insert into biz_operating(area_id,query_biz_time,accept_biz_time,pay_boot_work_order_amt,pay_boot_avg_time,open_account_avg_time,prod_chg_avg_time,mk_act_avg_time,data_query_avg_time,
+        bill_query_avg_time,unified_ac_pf_deal_suc_rate,detect_suc_rate,boss_interface_deal_amt,boss_interface_suc_rate,province_interface_deal_amt,province_interface_suc_rate, one_min_boot_timely_rate,
+        three_min_boot_timely_rate,five_min_boot_timely_rate,eneity_crm_amt,elec_crm_amt,ivr_crm_amt,boss_crm_amt,other_crm_amt,flow_exhaustion_alert_suc_rate,fivem_flow_alert_sms_timely_rate,create_time)
+        values(#(area.id),#(queryBizTime),#(acceptBizTime),#(payBootWorkOrderAmt),#(payBootAvgTime),#(openAccountAvgTime),#(productChgAvgTime),#(mkActAvgTime),#(dataQueryAvgTime),
+        #(billQueryAvgTime),#(unifiedAcPfDealSucRate),#(detectSucRate),#(bossInterfaceDealAmt),#(bossInterfaceSucRate),#(provinceInterfaceDealAmt),#(provinceInterfaceSucRate),#(oneMinBootTimelyRate),#(threeMinBootTimelyRate),
+        #(fiveMinBootTimelyRate),#(eneityCrmAmt),#(elecCrmAmt),#(ivrCrmAmt),#(bossCrmAmt),#(otherCrmAmt),#(flowExhaustionAlertSucRate),#(fivemFlowAlertSmsTimelyRate),#(createTime))
+    </insert>
+
+    <sql id="findBusiOper">
+        select a.id,a.name,b.id,b.query_biz_time,b.accept_biz_time,b.pay_boot_work_order_amt,b.pay_boot_avg_time,b.open_account_avg_time,b.prod_chg_avg_time,b.mk_act_avg_time,
+        b.data_query_avg_time,b.bill_query_avg_time,b.unified_ac_pf_deal_suc_rate,b.detect_suc_rate,b.boss_interface_deal_amt,b.boss_interface_suc_rate,b.province_interface_deal_amt,b.province_interface_suc_rate,b.one_min_boot_timely_rate,
+        b.three_min_boot_timely_rate,b.five_min_boot_timely_rate,b.eneity_crm_amt,b.elec_crm_amt,b.ivr_crm_amt,b.boss_crm_amt,b.other_crm_amt,b.flow_exhaustion_alert_suc_rate,b.fivem_flow_alert_sms_timely_rate,b.create_time
+        from biz_operating b,area a
+    </sql>
+
+    <select id="selectBusiOper" resultMap="findBussinessOperating" parameterType="integer">
+        <include refid="findBusiOper" />
+        where b.area_id = #{areaId} and b.area_id = a.id
+        and create_time in(select max(create_time) from biz_operating)
+    </select>
+</mapper>
+
+
+
+

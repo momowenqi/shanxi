@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.KeyBusinessMapper">
+    <resultMap id="findKeyBusinessMapper" type="boco.shanxi.domain.KeyBusiness">
+        <id property="id" column="id" />
+        <result property="openAccount5minProcessAmt" column="open_account_5min_process_amt" />
+        <result property="openAccountAvgTime" column="open_account_avg_time" />
+        <result property="prodUpd5minProcessAmt" column="prod_upd_5min_process_amt" />
+        <result property="prodUpdAvgTime" column="prod_upd_avg_time" />
+        <result property="mkAct5minProcessAmt" column="mk_act_5min_process_amt" />
+        <result property="mkActAvgTime" column="mk_act_avg_time" />
+        <result property="chgCard5minProcessAmt" column="chg_card_5min_process_amt" />
+        <result property="chgCardAvgTime" column="chg_card_avg_time" />
+        <result property="openAccountErrAmt" column="open_account_err_amt" />
+        <result property="openAccount3minCompRate" column="open_account_3min_comp_rate" />
+        <result property="prodUpdErrAmt" column="prod_upd_err_amt" />
+        <result property="prodUpd3minCompRate" column="prod_upd_3min_comp_rate" />
+        <result property="mkActErrAmt" column="mk_act_err_amt" />
+        <result property="mkAct3minCompRate" column="mk_act_3min_comp_rate" />
+        <result property="chgCardErrAmt" column="chg_card_err_amt" />
+        <result property="chgCard3minCompRate" column="chg_card_3min_comp_rate" />
+        <result property="createTime" column="create_time" />
+        <association property="area" javaType="boco.shanxi.domain.Area">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="createTime" column="create_time" />
+        </association>
+    </resultMap>
+ 
+    <insert id="insertKeyBusiness" parameterType="boco.shanxi.domain.KeyBusiness">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into key_business(area_id,open_account_5min_process_amt,open_account_avg_time,prod_upd_5min_process_amt,prod_upd_avg_time,
+        mk_act_5min_process_amt,mk_act_avg_time,chg_card_5min_process_amt,chg_card_avg_time,open_account_err_amt,open_account_3min_comp_rate,
+        prod_upd_err_amt,prod_upd_3min_comp_rate,mk_act_err_amt,mk_act_3min_comp_rate,chg_card_err_amt,chg_card_3min_comp_rate,create_time)
+        values(#{area.id},#{openAccount5minProcessAmt},#{openAccountAvgTime},#{prodUpd5minProcessAmt},#{prodUpdAvgTime},#{mkAct5minProcessAmt},#{mkActAvgTime},
+        #{chgCard5minProcessAmt},#{chgCardAvgTime},#{openAccountErrAmt},#{openAccount3minCompRate},#{prodUpdErrAmt},#{prodUpd3minCompRate},
+        #{mkActErrAmt},#{mkAct3minCompRate},#{chgCardErrAmt},#{chgCard3minCompRate},#{createTime})
+    </insert>
+
+    <sql id="findKeyBusi">
+        select b.id,b.open_account_5min_process_amt,b.open_account_avg_time,b.prod_upd_5min_process_amt,b.prod_upd_avg_time,
+        b.mk_act_5min_process_amt,b.mk_act_avg_time,b.chg_card_5min_process_amt,b.chg_card_avg_time,b.open_account_err_amt,b.open_account_3min_comp_rate,
+        b.prod_upd_err_amt,b.prod_upd_3min_comp_rate,b.mk_act_err_amt,b.mk_act_3min_comp_rate,b.chg_card_err_amt,b.chg_card_3min_comp_rate,b.create_time,
+        a.id,a.name.a.create_time
+        from key_business b,area a
+    </sql>
+    <select id="selectKeyBusiness" resultMap="findKeyBusinessMapper" parameterType="integer">
+        <include refid="findKeyBusi" />
+        where b.area_id = #{areaId} and b.area_id = a.id
+        and b.create_time in(select max(create_time) from key_business)
+    </select>
+</mapper>

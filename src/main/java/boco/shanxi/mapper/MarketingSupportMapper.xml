@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.MarketingSupportMapper">
+    <resultMap id="findMarketingMapper" type="boco.shanxi.domain.MarketingSupport">
+        <id property="id" column="id" />
+        <result property="mkSum" column="mk_sum" />
+        <result property="monMkAmt" column="mon_mk_amt" />
+        <result property="monSucAmt" column="mon_suc_amt" />
+        <result property="sucSum" column="suc_sum" />
+        <result property="ytdMkAmt" column="ytd_mk_amt" />
+        <result property="ytdSucAmt" column="ytd_suc_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addMarketing" parameterType="boco.shanxi.domain.MarketingSupport">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into marketing_suopport(mk_sum,mon_mk_amt,mon_suc_amt,suc_sum,ytd_mk_amt,ytd_suc_amt,create_time)
+        values(#{mkSum},#{monMkAmt},#{monSucAmt},#{sucSum},#{ytdMkAmt},#{ytdSucAmt},#{createTime})
+    </insert>
+
+    <select id="selectMarketing" resultMap="findMarketingMapper">
+        select id,mk_sum,mon_mk_amt,mon_suc_amt,suc_sum,ytd_mk_amt,ytd_suc_amt,create_time
+        from marketing_suopport
+    </select>
+</mapper>

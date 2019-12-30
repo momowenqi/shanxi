@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.AreaMapper">
+    <resultMap id="findArea" type="boco.shanxi.domain.Area">
+        <id column="id" property="id" />
+        <result property="name" column="name" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+    
+    <sql id="select">
+        select id,name,create_time from Area
+    </sql>
+
+    <insert id="insertArea" parameterType="boco.shanxi.domain.Area">
+        <selectKey order="AFTER" resultType="integer">
+            select last_insert_id()
+        </selectKey>
+        insert into Area(name,create_time) values(#{name},#{createTime})
+    </insert>
+
+    <select id="selectArea" resultMap="findArea">
+        <include refid="select" />
+    </select>
+</mapper>

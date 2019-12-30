@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.DecisionSupportMapper">
+    <resultMap id="findDecisionMapper" type="boco.shanxi.domain.DecisionSupport">
+        <id property="id" column="id" />
+        <result property="mobileFlow" column="mobile_flow" />
+        <result property="mobileFlowGrowth" column="mobile_flow_growth" />
+        <result property="commCustomerArrival" column="comm_customer_arrival" />
+        <result property="commCustomerNetInc" column="comm_customer_net_inc" />
+        <result property="commCustomerShare" column="comm_customer_share" />
+        <result property="fourgCustomerArrival" column="fourg_customer_arrival" />
+        <result property="fourgCustomerNetInc" column="fourg_customer_net_inc" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addDecision" parameterType="boco.shanxi.domain.DecisionSupport">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into decision_support(mobile_flow,mobile_flow_growth,comm_customer_arrival,comm_customer_net_inc,comm_customer_share,fourg_customer_arrival,fourg_customer_net_inc,create_time)
+        values(#{mobileFlow},#{mobileFlowGrowth},#{commCustomerArrival},#{commCustomerNetInc},#{commCustomerShare},#{fourgCustomerArrival},#{fourgCustomerNetInc},#{createTime})
+    </insert>
+
+    <sql id="selectDecision">
+        select id,mobile_flow,mobile_flow_growth,comm_customer_arrival,comm_customer_net_inc,comm_customer_share,fourg_customer_arrival,fourg_customer_net_inc,create_time
+        from decision_support
+    </sql>
+    <select id="selectDecisionList" resultMap="findDecisionMapper">
+        <include refid="selectDecision" />
+        where create_time in(select max(create_time) from decision_support)
+    </select>
+</mapper>

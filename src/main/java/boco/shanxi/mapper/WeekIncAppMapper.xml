@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybaits.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boco.shanxi.mapper.WeekIncAppMapper">
+    <resultMap id="findWeekAddMapper" type="boco.shanxi.domain.WeekIncApp">
+        <id property="id" column="id" />
+        <result property="appName" column="app_name" />
+        <result property="appIncAmt" column="app_inc_amt" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="addWeekIncApp" parameterType="boco.shanxi.domain.WeekIncApp">
+        <selectKey keyProperty="id" resultType="integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into week_inc_app(app_name,app_inc_amt,create_time)
+        values(#{appName},#{appIncAmt},#{createTime})
+    </insert>
+
+    <select id="selectWeekIncApp" resultMap="findWeekAddMapper">
+        select id,name,amount
+        from week_inc_app limit 5
+    </select>
+</mapper>
